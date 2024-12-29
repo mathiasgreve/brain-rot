@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Entry</title>
+</head>
+<body>
+    <h1>Add a New Entry</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" style="background-color: rgb(70, 70, 228); color: white; padding: 10px; border-radius: 5px;">
+            Submit
+        </button>
+    </form>
+    <a href="{% url 'home' %}">
+        <button style="background-color: rgb(82, 82, 114); color: white; padding: 10px; border-radius: 5px;">
+            Back to Home
+        </button>
+    </a>
+</body>
+</html>

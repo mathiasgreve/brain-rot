@@ -1,0 +1,78 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #343454; /* Light gray background */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Make sure this matches your HTML font link */
+h1 {
+    color: #decfcf;
+    text-align: center;
+    margin-top: 50px;
+    font-family: 'Rubik Vinyl'; /* Google font */
+    font-size: 46px; /* Optional, to adjust font size */
+    font-weight: 700; /* Optional, to make the font bold */
+}
+
+
+
+/* Add Entry Button */
+button {
+    background-color: #007bff; /* Blue background */
+    color: white;
+    padding: 12px 24px;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Entries List */
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 30px;
+    width: 80%;
+    max-width: 1000px;
+}
+
+li {
+    background-color: rgb(255, 255, 255);
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for card-like effect */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+li:hover {
+    transform: scale(1.03); /* Slight zoom effect */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); /* Stronger shadow on hover */
+}
+
+h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 16px;
+    color: #666;
+}
+
+/* Author and Date */
+p.author {
+    font-size: 14px;
+    color: #888;
+    margin-top: 10px;
+}
