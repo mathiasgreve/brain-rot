@@ -1,5 +1,8 @@
 ### OSX ###
+._*
 .DS_Store
+.fseventsd
+.Spotlight-V100
 .AppleDouble
 .LSOverride
 
@@ -101,6 +104,9 @@ celerybeat-schedule.*
 
 # SageMath parsed files 
 *.sage.py 
+
+# Static folder at project root
+/static/
 
 # Environments 
 .env 
