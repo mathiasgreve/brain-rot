@@ -1,89 +1,45 @@
-<!DOCTYPE html>
-<html>
+{% extends "base_generic.html" %}
 {% load static %}
 {% load auth_extras %}
 
-<head>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik+Vinyl&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <title>Brain Rot Dictionary</title>
-</head>
-<body>
-    <h1>Brain Rot Dictionary</h1>
+{% block title %}
+<title>Home - Brain Rot Dictionary</title>
+{% endblock %}
 
-    <!-- Auth buttons -->
-    {% if user.is_authenticated %}
-        <p>Welcome, {{ user.username }}!</p>
-        <form action="{% url 'logout' %}" method="post" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit" style="background-color: red; color: white; padding: 10px; border-radius: 5px;">
-                Logout
-            </button>
+{% block content %}
+  <h1>Brain Rot Dictionary</h1>
+
+  <!-- Add Entry Button, only for logged-in users -->
+  {% if user.is_authenticated %}
+    <a href="{% url 'add_entry' %}" class="btn btn-primary mb-3">Add a New Entry</a>
+  {% else %}
+    <p class="text-muted">Please log in to add a new entry.</p>
+  {% endif %}
+
+  <!-- Entries Section -->
+  <ul class="list-unstyled">
+    {% for entry in entries %}
+      <li class="mb-4">
+        <h2>{{ entry.title }}</h2>
+        <p>{{ entry.description }}</p>
+        <p class="text-muted">
+          Submitted by {{ entry.author.username }} on {{ entry.created_at }}
+        </p>
+        <p>Downvotes: {{ entry.downvote_count }}</p>
+        <p>Upvotes: {{ entry.upvote_count }}</p>
+
+        <!-- Voting Section -->
+        <form action="{% url 'upvote_entry' entry.id %}" method="post" class="d-inline">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-success btn-sm">Upvote</button>
         </form>
-        
-    {% else %}
-        <a href="{% url 'login' %}">
-            <button style="background-color: orange; color: white; padding: 10px; border-radius: 5px;">
-                Login
-            </button>
-        </a>
-        <a href="{% url 'signup' %}">
-            <button style="background-color: green; color: white; padding: 10px; border-radius: 5px;">
-                Sign Up
-            </button>
-        </a>
-    {% endif %}
-
-    <!-- Add Entry Button, only for logged-in users -->
-    {% if user.is_authenticated %}
-        <a href="{% url 'add_entry' %}">
-            <button style="background-color: blue; color: white; padding: 10px; border-radius: 5px;">
-                Add a New Entry
-            </button>
-        </a>
-    {% else %}
-        <p>Please log in to add a new entry.</p>
-    {% endif %}
-
-
-    <!-- Entries Section -->
-    <ul>
-        {% for entry in entries %}
-            <li>
-                <h2>{{ entry.title }}</h2>
-                <p>{{ entry.description }}</p>
-                <p>Submitted by {{ entry.author.username }} on {{ entry.created_at }}</p>
-                <p>Downvotes: {{ entry.downvote_count }}</p>
-                <p>Upvotes: {{ entry.upvote_count }}</p>       
-
-
-
-                <!-- Voting Section -->
-                <div style="margin-top: 10px;">
-
-                    
-                    <form action="{% url 'upvote_entry' entry.id %}" method="post" style="display: inline;">
-                        {% csrf_token %}
-                        <button type="submit" style="background-color: green; color: white; padding: 5px; border-radius: 5px;">
-                            Upvote
-                        </button>
-                    </form>
-                    <form action="{% url 'downvote_entry' entry.id %}" method="post" style="display: inline;">
-                        {% csrf_token %}
-                        <button type="submit" style="background-color: red; color: white; padding: 5px; border-radius: 5px;">
-                            Downvote
-                        </button>
-                    </form>
-                    
-
-
-                </div>
-            </li>
-        {% empty %}
-            <li>No entries available. Please add some!</li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+        <form action="{% url 'downvote_entry' entry.id %}" method="post" class="d-inline">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger btn-sm">Downvote</button>
+        </form>
+      </li>
+    {% empty %}
+      <li>No entries available. Please add some!</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
