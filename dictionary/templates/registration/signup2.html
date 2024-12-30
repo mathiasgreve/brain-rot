@@ -12,6 +12,8 @@
       <h1>Register</h1>
         
       <form method="POST">
+
+        {% csrf_token %}
       
         <div class="txt_field">
             <input type="text" required>
