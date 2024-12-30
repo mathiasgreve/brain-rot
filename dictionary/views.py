@@ -3,7 +3,7 @@ from django.http import JsonResponse
 
 
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import EntryForm
+from .forms import EntryForm, UserCreationFormMail
 
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
@@ -22,7 +22,7 @@ def signup(request):
             return redirect('login')  # Redirect to the login page after successful signup
     else:
         form = UserCreationForm()
-    return render(request, 'registration/signup.html', {'form': form})
+    return render(request, 'registration/signup2.html', {'form': form})
 
 @login_required
 def add_entry(request):

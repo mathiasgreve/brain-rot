@@ -10,7 +10,7 @@ class EntryForm(forms.ModelForm):
         fields = ['title', 'description']
 
 class UserCreationFormMail(UserCreationForm):
-    mail = forms.EmailField(required=True)
+    mail = forms.EmailField(required=True, label='Emai l')
 
     class Meta:
         model = User
