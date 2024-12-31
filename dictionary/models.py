@@ -15,6 +15,13 @@ class Entry(models.Model):
 
     def __str__(self):
         return self.title
+    
+class Example(models.Model):
+    entry = models.ForeignKey(Entry, on_delete=models.CASCADE, related_name="examples")
+    text = models.TextField()
+
+    def __str__(self):
+        return f"Example for {self.entry.title}: {self.text[:30]}..."
 
 class Vote(models.Model):
     UPVOTE = 1
