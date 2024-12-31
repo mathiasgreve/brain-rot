@@ -3,23 +3,25 @@ from django.http import JsonResponse
 
 
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import EntryForm
+from .forms import EntryForm, UserCreationFormMail
 
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
+def loginView(request):
+    return render(request, 'login.html')
 
 def signup(request):
     if request.user.is_authenticated:
         return redirect('home')
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UserCreationFormMail(request.POST)
         if form.is_valid():
             form.save()
             return redirect('login')  # Redirect to the login page after successful signup
     else:
-        form = UserCreationForm()
+        form = UserCreationFormMail()
     return render(request, 'registration/signup.html', {'form': form})
 
 @login_required
