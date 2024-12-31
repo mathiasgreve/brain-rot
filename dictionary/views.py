@@ -27,16 +27,28 @@ def signup(request):
 @login_required
 def add_entry(request):
     if request.method == 'POST':
+        # First, instantiate EntryForm
         form = EntryForm(request.POST)
-        if form.is_valid():
+        example_formset = ExampleFormSet(request.POST)
+
+        if form.is_valid() and example_formset.is_valid():
+            # Save Entry object
             entry = form.save(commit=False)
             entry.author = request.user
             entry.save()
-            return redirect('home')
+
+            # Now save the examples
+            for example_form in example_formset:
+                example = example_form.save(commit=False)
+                example.entry = entry  # Link example to the entry
+                example.save()
+
+            return redirect('home')  # Redirect after saving
     else:
         form = EntryForm()
-    return render(request, 'dictionary/add_entry.html', {'form': form})
+        example_formset = ExampleFormSet(queryset=Example.objects.none())
 
+    return render(request, 'dictionary/add_entry.html', {'form': form, 'example_formset': example_formset})
 
 def home(request):
     entries = Entry.objects.all()

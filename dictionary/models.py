@@ -18,7 +18,7 @@ class Entry(models.Model):
     
 class Example(models.Model):
     entry = models.ForeignKey(Entry, on_delete=models.CASCADE, related_name="examples")
-    text = models.TextField()
+    example_text = models.TextField()
 
     def __str__(self):
         return f"Example for {self.entry.title}: {self.text[:30]}..."

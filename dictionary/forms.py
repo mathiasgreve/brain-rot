@@ -1,33 +1,27 @@
 from django import forms
-from .models import Entry
+from .models import Entry, Example
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 
-class EntryForm(forms.ModelForm):
-    # Add a new field for multiple examples (textarea for simplicity)
-    examples = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}), required=False, label="Examples")
+class ExampleForm(forms.ModelForm):
+    class Meta:
+        model = Example
+        fields = ['example_text']
 
+class EntryForm(forms.ModelForm):
     class Meta:
         model = Entry
         fields = ['title', 'description']
-
-    def save(self, commit=True):
-        entry = super().save(commit=False)
-        
-        # Save the entry object first
-        if commit:
-            entry.save()
-        
-        # Process the examples and create corresponding Example objects
-        examples_text = self.cleaned_data.get('examples', '')
-        if examples_text:
-            examples = examples_text.split('\n')  # Split the examples by newline
-            for example in examples:
-                if example.strip():  # Skip empty examples
-                    Example.objects.create(entry=entry, text=example.strip())
-        
-        return entry
+    
+    # Add examples field dynamically in the formset
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add a field for examples
+        self.fields['examples'] = forms.CharField(
+            widget=forms.Textarea(attrs={'placeholder': 'Example text...'}), 
+            required=False
+        )
 
 """
 class UserCreationFormMail(UserCreationForm):
