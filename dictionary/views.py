@@ -16,13 +16,13 @@ def signup(request):
     if request.user.is_authenticated:
         return redirect('home')
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UserCreationFormMail(request.POST)
         if form.is_valid():
             form.save()
             return redirect('login')  # Redirect to the login page after successful signup
     else:
-        form = UserCreationForm()
-    return render(request, 'registration/signup2.html', {'form': form})
+        form = UserCreationFormMail()
+    return render(request, 'registration/signup.html', {'form': form})
 
 @login_required
 def add_entry(request):
