@@ -25,7 +25,7 @@
         <!-- Render related examples -->
         <h3>Examples:</h3>
         <div>
-            {% for example in entry.example_set.all %}
+            {% for example in entry.examples.all %}
                 <p>{{ example.example_text }}</p>
             {% endfor %}
         </div>

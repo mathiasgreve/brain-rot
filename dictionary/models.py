@@ -21,7 +21,7 @@ class Example(models.Model):
     example_text = models.TextField()
 
     def __str__(self):
-        return f"Example for {self.entry.title}: {self.text[:30]}..."
+        return self.example_text
 
 class Vote(models.Model):
     UPVOTE = 1

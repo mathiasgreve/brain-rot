@@ -13,15 +13,7 @@ class EntryForm(forms.ModelForm):
     class Meta:
         model = Entry
         fields = ['title', 'description']
-    
-    # Add examples field dynamically in the formset
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Add a field for examples
-        self.fields['examples'] = forms.CharField(
-            widget=forms.Textarea(attrs={'placeholder': 'Example text...'}), 
-            required=False
-        )
+
 
 """
 class UserCreationFormMail(UserCreationForm):

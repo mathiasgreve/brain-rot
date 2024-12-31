@@ -2,42 +2,83 @@
 <html>
 <head>
     <title>Add Entry</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <h1>Add a New Entry</h1>
-    <h2>Add a New Entry</h2>
-    <form method="POST">
+    <form method="post" id="entry-form">
         {% csrf_token %}
+        {{ entry_form.as_p }}
         
-        <!-- Entry fields -->
-        {{ form.as_p }}
-    
-        <!-- Example formset fields -->
         <h3>Examples</h3>
-        <div id="example-formset">
+        {{ example_formset.management_form }}
+        <div id="example-forms">
             {% for form in example_formset %}
                 <div class="example-form">
-                    {{ form.as_p }}
+                    {{ form.example_text.label_tag }} {{ form.example_text }}
+                    <button type="button" class="remove-example">Remove</button>
                 </div>
             {% endfor %}
         </div>
         
-        <!-- Button to add more examples -->
-        <button type="button" id="add-example-btn">Add another example</button>
-        
-        <button type="submit">Add Entry</button>
+        <button type="button" id="add-example">Add another example</button>
+        <button type="submit">Save Entry</button>
     </form>
     
     <script>
-        // Handle adding more example fields dynamically
-        document.getElementById('add-example-btn').addEventListener('click', function() {
-            var formCount = document.querySelectorAll('.example-form').length;
-            var newForm = document.createElement('div');
-            newForm.classList.add('example-form');
-            newForm.innerHTML = '{% csrf_token %}<p><textarea name="example_text" placeholder="Example text..." required></textarea></p>';
-            
-            document.getElementById('example-formset').appendChild(newForm);
+        document.getElementById('add-example').addEventListener('click', function () {
+    const exampleFormsContainer = document.getElementById('example-forms');
+    const totalForms = document.getElementById('id_form-TOTAL_FORMS');
+    const currentFormCount = parseInt(totalForms.value);
+
+    // Clone a template form or create a new one dynamically
+    const newForm = document.createElement('div');
+    newForm.className = 'example-form';
+    newForm.innerHTML = `
+        <label for="id_form-${currentFormCount}-example_text">Example:</label>
+        <textarea name="form-${currentFormCount}-example_text" id="id_form-${currentFormCount}-example_text" rows="3" cols="50"></textarea>
+        <button type="button" class="remove-example">Remove</button>
+    `;
+
+    // Add event listener for the "Remove" button
+    newForm.querySelector('.remove-example').addEventListener('click', function () {
+        newForm.remove();
+        updateTotalForms();
+    });
+
+    exampleFormsContainer.appendChild(newForm);
+
+    // Update TOTAL_FORMS count
+    totalForms.value = currentFormCount + 1;
+});
+
+
+        // Handle removing example forms
+        document.querySelectorAll('.remove-example').forEach(button => {
+            button.addEventListener('click', function () {
+                const exampleForm = button.closest('.example-form');
+                exampleForm.remove();
+                updateTotalForms();
+            });
         });
+
+        function updateTotalForms() {
+            const exampleFormsContainer = document.getElementById('example-forms');
+            const totalForms = document.getElementById('id_form-TOTAL_FORMS');
+            const forms = exampleFormsContainer.querySelectorAll('.example-form');
+            forms.forEach((form, index) => {
+                const input = form.querySelector('input');
+                input.name = `form-${index}-example_text`;
+                input.id = `id_form-${index}-example_text`;
+                const label = form.querySelector('label');
+                label.setAttribute('for', `id_form-${index}-example_text`);
+            });
+            totalForms.value = forms.length;
+        }
     </script>
     
     <a href="{% url 'home' %}">
