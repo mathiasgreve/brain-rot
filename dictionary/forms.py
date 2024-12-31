@@ -5,9 +5,29 @@ from django.contrib.auth.models import User
 
 
 class EntryForm(forms.ModelForm):
+    # Add a new field for multiple examples (textarea for simplicity)
+    examples = forms.CharField(widget=forms.Textarea(attrs={'rows': 4}), required=False, label="Examples")
+
     class Meta:
         model = Entry
         fields = ['title', 'description']
+
+    def save(self, commit=True):
+        entry = super().save(commit=False)
+        
+        # Save the entry object first
+        if commit:
+            entry.save()
+        
+        # Process the examples and create corresponding Example objects
+        examples_text = self.cleaned_data.get('examples', '')
+        if examples_text:
+            examples = examples_text.split('\n')  # Split the examples by newline
+            for example in examples:
+                if example.strip():  # Skip empty examples
+                    Example.objects.create(entry=entry, text=example.strip())
+        
+        return entry
 
 """
 class UserCreationFormMail(UserCreationForm):
