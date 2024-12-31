@@ -22,6 +22,13 @@
       <li class="mb-4">
         <h2>{{ entry.title }}</h2>
         <p>{{ entry.description }}</p>
+        <!-- Render related examples -->
+        <h3>Examples:</h3>
+        <div>
+            {% for example in entry.examples.all %}
+                <p>{{ example.example_text }}</p>
+            {% endfor %}
+        </div>
         <p class="text-muted">
           Submitted by {{ entry.author.username }} on {{ entry.created_at }}
         </p>

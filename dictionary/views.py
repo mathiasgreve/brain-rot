@@ -1,9 +1,11 @@
-from .models import Entry, Vote
+from .models import Entry, Vote, Example
 from django.http import JsonResponse
+
+from django.forms import modelformset_factory
 
 
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import EntryForm, UserCreationFormMail
+from .forms import EntryForm, UserCreationFormMail, ExampleForm
 
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
@@ -26,20 +28,34 @@ def signup(request):
 
 @login_required
 def add_entry(request):
+    ExampleFormSet = modelformset_factory(Example, form=ExampleForm, extra=1, can_delete=True)
     if request.method == 'POST':
-        form = EntryForm(request.POST)
-        if form.is_valid():
-            entry = form.save(commit=False)
+        entry_form = EntryForm(request.POST)
+        example_formset = ExampleFormSet(request.POST, queryset=Example.objects.none())
+        
+        if entry_form.is_valid() and example_formset.is_valid():
+            entry = entry_form.save(commit=False)
             entry.author = request.user
             entry.save()
+
+            for form in example_formset:
+                if form.cleaned_data:  # Skip empty forms
+                    example = form.save(commit=False)
+                    example.entry = entry
+                    example.save()
+
             return redirect('home')
     else:
-        form = EntryForm()
-    return render(request, 'dictionary/add_entry.html', {'form': form})
+        entry_form = EntryForm()
+        example_formset = ExampleFormSet(queryset=Example.objects.none())
 
+    return render(request, 'dictionary/add_entry.html', {
+        'entry_form': entry_form,
+        'example_formset': example_formset,
+    })
 
 def home(request):
-    entries = Entry.objects.all()
+    entries = Entry.objects.prefetch_related('examples').all()
 
     # Add vote counts to each entry
     for entry in entries:

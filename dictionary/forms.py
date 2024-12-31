@@ -1,13 +1,19 @@
 from django import forms
-from .models import Entry
+from .models import Entry, Example
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
+
+class ExampleForm(forms.ModelForm):
+    class Meta:
+        model = Example
+        fields = ['example_text']
 
 class EntryForm(forms.ModelForm):
     class Meta:
         model = Entry
         fields = ['title', 'description']
+
 
 """
 class UserCreationFormMail(UserCreationForm):
