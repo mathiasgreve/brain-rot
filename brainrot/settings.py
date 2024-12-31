@@ -131,4 +131,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 #LOGIN_REDIRECT_URL = '/'  # Redirect after login
 #LOGOUT_REDIRECT_URL = '/'  # Redirect after logout
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'   #Sends real emails using an SMTP server.
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #Outputs emails to the console (for testing only).
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'mathias.brainrot@gmail.com'
+EMAIL_HOST_PASSWORD = 'ckpp evlb sezv hnge'
+DEFAULT_FROM_EMAIL = 'mathias.brainrot@example.com'
