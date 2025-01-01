@@ -130,9 +130,6 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-#LOGIN_REDIRECT_URL = '/'  # Redirect after login
-#LOGOUT_REDIRECT_URL = '/'  # Redirect after logout
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'   #Sends real emails using an SMTP server.
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #Outputs emails to the console (for testing only).
 EMAIL_HOST = 'smtp.gmail.com'
